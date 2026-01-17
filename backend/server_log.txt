@@ -1,0 +1,95 @@
+C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sklearn\base.py:463: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.7.2 when using version 1.8.0. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+Traceback (most recent call last):
+  File "C:\Users\OM Sanjhira\OneDrive\Desktop\hackathon\app\ml\career_prediction.py", line 32, in __init__
+    print("\u2705 ML model loaded from disk")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2705' in position 0: character maps to <undefined>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Scripts\uvicorn.exe\__main__.py", line 7, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\click\core.py", line 1161, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\click\core.py", line 1082, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\click\core.py", line 1443, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\click\core.py", line 788, in invoke
+    return __callback(*args, **kwargs)
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\uvicorn\main.py", line 423, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<46 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\uvicorn\main.py", line 593, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\uvicorn\server.py", line 67, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\uvicorn\server.py", line 71, in serve
+    await self._serve(sockets)
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\uvicorn\server.py", line 78, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\uvicorn\config.py", line 438, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\uvicorn\importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\OM Sanjhira\OneDrive\Desktop\hackathon\app\main.py", line 9, in <module>
+    from app.api import user_routes, admin_routes
+  File "C:\Users\OM Sanjhira\OneDrive\Desktop\hackathon\app\api\user_routes.py", line 10, in <module>
+    from app.ml.career_prediction import predictor
+  File "C:\Users\OM Sanjhira\OneDrive\Desktop\hackathon\app\ml\career_prediction.py", line 108, in <module>
+    predictor = CareerPredictor()
+  File "C:\Users\OM Sanjhira\OneDrive\Desktop\hackathon\app\ml\career_prediction.py", line 34, in __init__
+    print(f"\u26a0\ufe0f  Error loading model: {e}")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 0-1: character maps to <undefined>
+DEBUG: auth.py - about to import datetime
+DEBUG: auth.py - about to import Optional
+DEBUG: auth.py - about to import fastapi
+DEBUG: auth.py - about to import OAuth2PasswordBearer
+DEBUG: auth.py - about to import CryptContext
+DEBUG: auth.py - about to import jose
+DEBUG: auth.py - about to import Session
+DEBUG: auth.py - about to import database
+DEBUG: auth.py - about to import models

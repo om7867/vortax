@@ -1,0 +1,77 @@
+import requests
+from sqlalchemy.orm import Session
+from app.core.database import SessionLocal
+from app.auth.models import User, LoginHistory
+import sys
+
+BASE_URL = "http://localhost:8000"
+
+def verify_auth():
+    print("🔐 Verifying Auth Module V2...")
+    
+    # 1. Signup
+    signup_data = {
+        "username": "testuser_uuid",
+        "email": "uuid@test.com",
+        "password": "password123",
+        "full_name": "Test UUID User"
+    }
+    try:
+        r = requests.post(f"{BASE_URL}/auth/signup", json=signup_data)
+        if r.status_code == 200:
+            print("✅ Signup Successful")
+            tokens = r.json()
+            print(f"   Token: {tokens.get('access_token')[:20]}...")
+            
+            # Check Cookie
+            if "access_token" in r.cookies:
+                print("✅ HttpOnly Cookie Set (Signup)")
+            else:
+                 print("⚠️  No Cookie in Signup response (Check backend)")
+        elif r.status_code == 400:
+             print("ℹ️  User already exists (Skipping signup)")
+        else:
+            print(f"❌ Signup Failed: {r.text}")
+            return
+    except Exception as e:
+        print(f"❌ Connection Error: {e}")
+        return
+
+    # 2. Login
+    login_data = {
+        "username": "testuser_uuid",
+        "password": "password123"
+    }
+    r = requests.post(f"{BASE_URL}/auth/login", data=login_data)
+    if r.status_code == 200:
+        print("✅ Login Successful")
+        
+        # Check Cookie
+        cookie = r.cookies.get("access_token")
+        if cookie:
+            print(f"✅ HttpOnly Cookie Found: {cookie[:20]}...")
+        else:
+            print("❌ HttpOnly Cookie MISSING in Login Response")
+    else:
+        print(f"❌ Login Failed: {r.text}")
+        return
+
+    # 3. Verify DB Records
+    db = SessionLocal()
+    try:
+        user = db.query(User).filter(User.username == "testuser_uuid").first()
+        if user:
+            print(f"✅ User Found in DB: ID={user.id} (Type: {type(user.id)})")
+            
+            # Check History
+            history = db.query(LoginHistory).filter(LoginHistory.user_id == user.id).all()
+            print(f"✅ Login History Records: {len(history)}")
+            for h in history:
+                print(f"   - {h.timestamp} | IP: {h.ip_address} | Success: {h.success}")
+        else:
+            print("❌ User NOT found in DB")
+    finally:
+        db.close()
+
+if __name__ == "__main__":
+    verify_auth()

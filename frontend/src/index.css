@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@theme {
+  --color-agri-green: #1B5E20;
+  --color-agri-green-light: #4CAF50;
+  --color-agri-yellow: #F9A825;
+  --color-agri-brown: #6D4C41;
+  --color-agri-bg: #F1F8E9;
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-agri-bg text-gray-900 font-sans antialiased;
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    @apply bg-white/70 backdrop-blur-lg border border-white/50 shadow-xl rounded-2xl;
+  }
+
+  .glass-card-dark {
+    @apply bg-gray-900/80 backdrop-blur-lg border border-white/10 shadow-xl rounded-2xl text-white;
+  }
+
+  .text-gradient-agri {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-agri-green to-agri-yellow;
+  }
+}
+
+@theme {
+  --color-gray-50: #f9fafb;
+  --color-gray-900: #111827;
+}
+
+@layer base {
+  body {
+    @apply antialiased text-gray-900 bg-gray-50;
+  }
+}
