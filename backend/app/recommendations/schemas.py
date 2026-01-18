@@ -81,3 +81,39 @@ class UserLearningProgressOut(BaseModel):
 
     class Config:
         from_attributes = True
+class LearningRoadmapOut(BaseModel):
+    id: UUID
+    user_id: UUID
+    skill_id: UUID
+    month: int
+    action: str
+    resource_type: ResourceType
+    link: Optional[str] = None
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+class CourseInfo(BaseModel):
+    platform: str
+    title: str
+    link: str
+
+class JobRoleInfo(BaseModel):
+    title: str
+    linkedin_search: str
+
+class SkillRecommendation(BaseModel):
+    skill: str
+    status: str
+    current_score: float
+    required_score: float
+    learning_duration_months: int
+    courses: List[CourseInfo]
+    certifications: List[str]
+    job_roles: List[JobRoleInfo]
+
+class DetailedRecommendationOut(BaseModel):
+    role: str
+    overall_readiness: float
+    skills: List[SkillRecommendation]

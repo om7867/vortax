@@ -10,6 +10,8 @@ from app.assessments.schemas import TestSubmission
 from app.profile.models import ProfileCompletion, UserProfile
 from app.skills.models import UserSkillProfile, SkillMaster
 from app.auth.models import User
+from app.gap_analysis.services import GapAnalysisService
+from app.recommendations.services import RecommendationService
 
 import logging
 logger = logging.getLogger("uvicorn.error")
@@ -247,16 +249,21 @@ class AssessmentService:
             user.latest_assessment_id = test.id
             user.latest_assessment_at = datetime.utcnow()
             
-            # Log Audit Action
-            from app.audit.services import AuditService
-            AuditService.log_action(
-                db=db,
-                actor_id=user_id,
-                action="ASSESSMENT_COMPLETED",
-                entity_type="SkillTest",
-                entity_id=test.id,
-                metadata={"total_score": total_score}
-            )
+        # Trigger Gap Analysis & Roadmap Refresh
+        db.flush() # Ensure SkillTestResults are visible
+        GapAnalysisService.evaluate_gap_analysis(db, user_id)
+        RecommendationService.generate_ml_roadmap(db, user_id)
+        
+        # Log Audit Action
+        from app.audit.services import AuditService
+        AuditService.log_action(
+            db=db,
+            actor_id=user_id,
+            action="ASSESSMENT_COMPLETED",
+            entity_type="SkillTest",
+            entity_id=test.id,
+            metadata={"total_score": total_score}
+        )
             
         db.commit()
         db.refresh(test)

@@ -14,6 +14,7 @@ from app.gap_analysis.models import SkillGapResult, GapStatus, CareerReadinessSn
 from app.scoring.models import SkillScore, ConfidenceLevel
 from app.skills.models import SkillMaster
 from app.profile.models import UserProfile, ExperienceLevel
+from app.ml.roadmap_engine import roadmap_engine
 
 class RecommendationService:
     """
@@ -299,6 +300,209 @@ class RecommendationService:
             })
             
         return result
+
+    @staticmethod
+    def generate_ml_roadmap(db: Session, user_id: UUID):
+        """
+        MASTER ML LOGIC for PathIQ:
+        1. Fetch all MISSING or NEEDS_IMPROVEMENT gaps
+        2. For each gap, use RoadmapEngine to predict duration_months
+        3. Map to specific resources (Courses, Certifications)
+        4. Distribute into a monthly timeline
+        5. Persist to learning_roadmap table
+        """
+        from .models import LearningRoadmap, LearningResource, ResourceType
+        
+        # Clear existing roadmap for refresh
+        db.query(LearningRoadmap).filter(LearningRoadmap.user_id == user_id).delete()
+        
+        # 1. Get Gaps
+        gaps = db.query(SkillGapResult).filter(
+            SkillGapResult.user_id == user_id,
+            SkillGapResult.gap_status.in_([GapStatus.MISSING, GapStatus.NEEDS_IMPROVEMENT])
+        ).all()
+        
+        if not gaps:
+            return []
+
+        roadmap_items = []
+        current_month = 1
+        
+        # Sort gaps by importance
+        role_id = gaps[0].role_id
+        requirements = db.query(RoleSkillRequirement).filter(
+            RoleSkillRequirement.role_id == role_id
+        ).all()
+        importance_map = {req.skill_id: req.importance_weight for req in requirements}
+        
+        gaps_with_importance = []
+        for g in gaps:
+            gaps_with_importance.append((g, importance_map.get(g.skill_id, 3)))
+        
+        # Sort by importance (highest first)
+        gaps_with_importance.sort(key=lambda x: x[1], reverse=True)
+
+        for gap, imp_weight in gaps_with_importance:
+            # 2. Predict duration
+            duration = roadmap_engine.predict_months(gap.user_score, gap.required_score, imp_weight)
+            
+            # 3. Determine Actions
+            # Month N: "Master [Skill] Foundations"
+            # Month N+1: "Advanced [Skill] Project"
+            # Final Month: "Obtain [Skill] Certification"
+            
+            skill_name = db.query(SkillMaster).filter(SkillMaster.id == gap.skill_id).first().name
+            
+            # Find resources
+            resources = db.query(LearningResource).filter(
+                LearningResource.skill_id == gap.skill_id
+            ).all()
+            
+            res_map = {r.resource_type: r for r in resources}
+            
+            # Step 1: Course
+            course = res_map.get(ResourceType.COURSE)
+            roadmap_items.append(LearningRoadmap(
+                user_id=user_id,
+                skill_id=gap.skill_id,
+                month=current_month,
+                action=f"Foundational Course: Mastery of {skill_name}",
+                resource_type=ResourceType.COURSE,
+                link=course.external_url if course else "https://coursera.org"
+            ))
+            
+            if duration > 1:
+                # Step 2: Project
+                proj = res_map.get(ResourceType.PROJECT)
+                roadmap_items.append(LearningRoadmap(
+                    user_id=user_id,
+                    skill_id=gap.skill_id,
+                    month=current_month + 1,
+                    action=f"Practical Implementation: {skill_name} Portfolio Project",
+                    resource_type=ResourceType.PROJECT,
+                    link=proj.external_url if proj else "https://github.com"
+                ))
+            
+            # Step 3: Certification
+            cert = res_map.get(ResourceType.CERTIFICATION)
+            roadmap_items.append(LearningRoadmap(
+                user_id=user_id,
+                skill_id=gap.skill_id,
+                month=current_month + int(duration),
+                action=f"Expert Validation: {skill_name} Professional Certification",
+                resource_type=ResourceType.CERTIFICATION,
+                link=cert.external_url if cert else "https://linkedin.com"
+            ))
+            
+            current_month += 1 # Stagger skills month by month
+            
+        for item in roadmap_items:
+            db.add(item)
+            
+        db.commit()
+        return roadmap_items
+
+    @staticmethod
+    def get_ml_roadmap(db: Session, user_id: UUID):
+        """Fetch the persisted ML roadmap from DB"""
+        from .models import LearningRoadmap
+        return db.query(LearningRoadmap).filter(
+            LearningRoadmap.user_id == user_id
+        ).order_by(LearningRoadmap.month.asc()).all()
+
+    @staticmethod
+    def get_detailed_recommendations(db: Session, user_id: UUID):
+        """
+        MASTER RECOMMENDATION CONTRACT:
+        1. Check Gap Analysis exists
+        2. Identify MISSING/IMPROVEMENT skills
+        3. Map courses/certs/jobs
+        4. Return structured response for UI
+        """
+        from fastapi import HTTPException
+        from .models import LearningResource, ResourceType
+        
+        # 1. Fetch Snapshot & Gaps
+        snapshot = db.query(CareerReadinessSnapshot).filter(
+            CareerReadinessSnapshot.user_id == user_id
+        ).order_by(CareerReadinessSnapshot.evaluated_at.desc()).first()
+        
+        if not snapshot:
+            raise HTTPException(status_code=409, detail="GAP_ANALYSIS_REQUIRED")
+            
+        gaps = db.query(SkillGapResult).filter(
+            SkillGapResult.user_id == user_id
+        ).all()
+        
+        if not gaps:
+             raise HTTPException(status_code=409, detail="GAP_ANALYSIS_REQUIRED")
+
+        role = db.query(Role).filter(Role.id == gaps[0].role_id).first()
+        role_name = role.name if role else "Specialist"
+        
+        # Get requirements for weights
+        requirements = db.query(RoleSkillRequirement).filter(
+            RoleSkillRequirement.role_id == gaps[0].role_id
+        ).all()
+        importance_map = {req.skill_id: req.importance_weight for req in requirements}
+
+        skills_recs = []
+        for gap in gaps:
+            # We focus on MISSING and NEEDS_IMPROVEMENT
+            if gap.gap_status not in [GapStatus.MISSING, GapStatus.NEEDS_IMPROVEMENT]:
+                continue
+                
+            skill_master = db.query(SkillMaster).filter(SkillMaster.id == gap.skill_id).first()
+            skill_name = skill_master.name if skill_master else "Unknown Skill"
+            
+            # Predict Duration
+            imp = importance_map.get(gap.skill_id, 3)
+            duration = roadmap_engine.predict_months(gap.user_score, gap.required_score, imp)
+            
+            # Find Resources
+            resources = db.query(LearningResource).filter(
+                LearningResource.skill_id == gap.skill_id
+            ).all()
+            
+            courses = []
+            certs = []
+            for r in resources:
+                if r.resource_type == ResourceType.COURSE:
+                    courses.append({
+                        "platform": r.provider,
+                        "title": r.title,
+                        "link": r.external_url or "https://coursera.org"
+                    })
+                elif r.resource_type == ResourceType.CERTIFICATION:
+                    certs.append(r.title)
+            
+            # Jobs - LinkedIn Search URL
+            # Format: https://www.linkedin.com/jobs/search/?keywords=Role%20Skill
+            safe_role = role_name.replace(" ", "%20")
+            safe_skill = skill_name.replace(" ", "%20")
+            linkedin_url = f"https://www.linkedin.com/jobs/search/?keywords={safe_role}%20{safe_skill}"
+            
+            skills_recs.append({
+                "skill": skill_name,
+                "status": gap.gap_status.value.upper(),
+                "current_score": gap.user_score,
+                "required_score": gap.required_score,
+                "learning_duration_months": int(duration),
+                "courses": courses[:1], # Limit to 1 for brevity as per UI request
+                "certifications": certs[:1],
+                "job_roles": [
+                    {
+                        "title": f"Junior {skill_name} {role_name}",
+                        "linkedin_search": linkedin_url
+                    }
+                ]
+            })
+            
+        return {
+            "role": role_name,
+            "overall_readiness": snapshot.readiness_percentage,
+            "skills": skills_recs
+        }
 
 
 class ProgressService:

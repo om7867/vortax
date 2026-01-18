@@ -10,6 +10,14 @@ const recommendationService = {
     },
 
     /**
+     * Get detailed gap-based recommendations (Module 6)
+     */
+    getDetailedRecommendations: async () => {
+        const response = await api.get('/api/v6/recommendations/detailed');
+        return response.data;
+    },
+
+    /**
      * Generate personalized month-wise roadmap
      */
     getRoadmap: async () => {
@@ -30,6 +38,22 @@ const recommendationService = {
      */
     getJobs: async () => {
         const response = await api.get('/api/v6/recommendations/jobs');
+        return response.data;
+    },
+
+    /**
+     * Trigger ML-driven roadmap generation (Module 6)
+     */
+    generateMLRoadmap: async () => {
+        const response = await api.post('/api/v6/recommendations/generate-roadmap');
+        return response.data;
+    },
+
+    /**
+     * Get the latest AI-generated roadmap
+     */
+    getMLRoadmap: async () => {
+        const response = await api.get('/api/v6/recommendations/ml-roadmap');
         return response.data;
     },
 

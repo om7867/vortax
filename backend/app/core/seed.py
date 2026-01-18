@@ -76,6 +76,12 @@ def seed_database():
         {"name": "Precision Agriculture", "domain": SkillDomain.TECHNOLOGY, "category": SkillCategory.TECHNICAL, "diff": 5},
         {"name": "IoT Sensors", "domain": SkillDomain.TECHNOLOGY, "category": SkillCategory.TECHNICAL, "diff": 3},
         {"name": "Farm Management", "domain": SkillDomain.AGRICULTURE, "category": SkillCategory.SOFT, "diff": 3},
+        # General/Common Tech
+        {"name": "Python", "domain": SkillDomain.TECHNOLOGY, "category": SkillCategory.TECHNICAL, "diff": 3},
+        {"name": "Machine Learning", "domain": SkillDomain.TECHNOLOGY, "category": SkillCategory.TECHNICAL, "diff": 4},
+        {"name": "SQL", "domain": SkillDomain.TECHNOLOGY, "category": SkillCategory.TECHNICAL, "diff": 3},
+        {"name": "React", "domain": SkillDomain.TECHNOLOGY, "category": SkillCategory.TECHNICAL, "diff": 3},
+        {"name": "FastAPI", "domain": SkillDomain.TECHNOLOGY, "category": SkillCategory.TECHNICAL, "diff": 4},
     ]
     
     skills_map = {} # name -> id
@@ -101,6 +107,9 @@ def seed_database():
         {"title": "Soil Scientist", "sector": "Agriculture", "domain": "agriculture", "readiness": 70.0},
         {"title": "Precision Agriculture Specialist", "sector": "AgriTech", "domain": "technology", "readiness": 75.0},
         {"title": "Farm Manager", "sector": "Agriculture", "domain": "agriculture", "readiness": 50.0},
+        {"title": "Data Scientist", "sector": "Technology", "domain": "technology", "readiness": 70.0},
+        {"title": "Software Engineer", "sector": "Technology", "domain": "technology", "readiness": 65.0},
+        {"title": "ML Engineer", "sector": "Technology", "domain": "technology", "readiness": 75.0},
     ]
     
     roles_map = {} # title -> id
@@ -130,6 +139,24 @@ def seed_database():
         ("Precision Agriculture Specialist", "IoT Sensors", 80, 4),
         ("Precision Agriculture Specialist", "Data Analysis", 75, 4),
         ("Precision Agriculture Specialist", "Irrigation Systems", 50, 2),
+
+        # Data Scientist
+        ("Data Scientist", "Python", 85, 5),
+        ("Data Scientist", "Machine Learning", 80, 5),
+        ("Data Scientist", "SQL", 75, 4),
+        ("Data Scientist", "Data Analysis", 90, 5),
+
+        # Software Engineer
+        ("Software Engineer", "Python", 80, 4),
+        ("Software Engineer", "React", 85, 5),
+        ("Software Engineer", "FastAPI", 80, 4),
+        ("Software Engineer", "SQL", 70, 3),
+
+        # ML Engineer
+        ("ML Engineer", "Python", 90, 5),
+        ("ML Engineer", "Machine Learning", 95, 5),
+        ("ML Engineer", "FastAPI", 70, 3),
+        ("ML Engineer", "Data Analysis", 80, 4),
     ]
     
     for role_name, skill_name, req_score, weight in requirements:

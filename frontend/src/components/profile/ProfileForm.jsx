@@ -163,16 +163,16 @@ export default function ProfileForm({ initialData = {}, onSuccess }) {
                         required
                     >
                         <option value="">Select Your Career Goal...</option>
-                        <option value="data_scientist">Data Scientist</option>
-                        <option value="health_analyst">Health Data Analyst</option>
-                        <option value="agronomist">Professional Agronomist</option>
-                        <option value="farm_manager">Modern Farm Manager</option>
-                        <option value="software_engineer">Full Stack Developer</option>
-                        <option value="urban_planner">Smart City Planner</option>
-                        <option value="ml_engineer">ML/AI Engineer</option>
-                        <option value="research_scientist">Research Scientist</option>
-                        <option value="student">Aspiring Trainee</option>
-                        <option value="other">Other Potential Role</option>
+                        <option value="Data Scientist">Data Scientist</option>
+                        <option value="Health Data Analyst">Health Data Analyst</option>
+                        <option value="Agronomist">Professional Agronomist</option>
+                        <option value="Farm Manager">Modern Farm Manager</option>
+                        <option value="Software Engineer">Full Stack Developer</option>
+                        <option value="Urban Planner">Smart City Planner</option>
+                        <option value="ML Engineer">ML/AI Engineer</option>
+                        <option value="Research Scientist">Research Scientist</option>
+                        <option value="Aspiring Trainee">Aspiring Trainee</option>
+                        <option value="Other Potential Role">Other Potential Role</option>
                     </select>
                 </div>
             </div>

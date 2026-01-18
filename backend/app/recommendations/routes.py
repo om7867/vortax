@@ -19,6 +19,16 @@ def get_db():
     finally:
         db.close()
 
+@router.get("/detailed", response_model=schemas.DetailedRecommendationOut)
+def get_detailed_recommendations(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Fetch high-fidelity skill-gap recommendations including courses, certs and jobs.
+    """
+    return services.RecommendationService.get_detailed_recommendations(db, current_user.id)
+
 @router.get("/", response_model=schemas.RecommendationSummary)
 def get_recommendations(
     db: Session = Depends(get_db),
@@ -95,3 +105,18 @@ def get_job_recommendations(
 ):
     """Fetch job recommendations based on readiness percentage (>=70%)"""
     return services.RecommendationService.get_job_recommendations(db, current_user.id)
+@router.post("/generate-roadmap", response_model=List[schemas.LearningRoadmapOut])
+def generate_ml_roadmap(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Trigger ML-driven roadmap generation based on current gaps."""
+    return services.RecommendationService.generate_ml_roadmap(db, current_user.id)
+
+@router.get("/ml-roadmap", response_model=List[schemas.LearningRoadmapOut])
+def get_ml_roadmap(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Fetch the latest AI-generated roadmap from DB."""
+    return services.RecommendationService.get_ml_roadmap(db, current_user.id)

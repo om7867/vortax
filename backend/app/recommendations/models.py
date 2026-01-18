@@ -117,3 +117,21 @@ class UserLearningPlan(Base):
     resource = relationship("LearningResource")
     
     __table_args__ = {"extend_existing": True}
+class LearningRoadmap(Base):
+    __tablename__ = "learning_roadmap"
+    
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
+    skill_id = Column(UUID(as_uuid=True), ForeignKey("skills_master.id"), nullable=False, index=True)
+    
+    month = Column(Integer, nullable=False) # Timeline marker (1, 2, 3...)
+    action = Column(String(500), nullable=False) # e.g., "Master Basics", "Obtain Certification"
+    resource_type = Column(SqEnum(ResourceType), nullable=False)
+    link = Column(String(500), nullable=True) # External resource URL
+    
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    
+    user = relationship("app.auth.models.User")
+    skill = relationship("app.skills.models.SkillMaster")
+    
+    __table_args__ = {"extend_existing": True}

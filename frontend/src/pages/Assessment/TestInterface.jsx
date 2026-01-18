@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import {
     ChevronLeft,
     ChevronRight,
@@ -17,31 +17,31 @@ import { cn } from '../../lib/utils';
 export default function TestInterface() {
     const { testId } = useParams();
     const navigate = useNavigate();
-    const [questions, setQuestions] = useState([]);
+    const { state } = useLocation();
+    const [questions, setQuestions] = useState(state?.questions || []);
     const [currentIdx, setCurrentIdx] = useState(0);
     const [answers, setAnswers] = useState({});
-    const [timer, setTimer] = useState(300); // 5 mins
-    const [loading, setLoading] = useState(true);
+    const [timer, setTimer] = useState(600); // 10 mins
+    const [loading, setLoading] = useState(!state?.questions);
 
     useEffect(() => {
         const fetchTest = async () => {
+            if (questions.length > 0) return;
             try {
-                // Mocking test data to match screenshot 4
-                setQuestions([
-                    { id: 1, text: "What is precision farming and its benefit?", options: ["High precision machinery", "Data-driven farm management", "Traditional farming methods", "None of the above"] },
-                    { id: 2, text: "Which sensor is commonly used in AgriTech?", options: ["Soil moisture sensor", "Heart rate monitor", "Seismograph", "Hydrometer"] },
-                    { id: 3, text: "What does NDVI stand for?", options: ["New Digital Vegetation Index", "Normalized Difference Vegetation Index", "Natural Data Vegetation Index", "None"] },
-                    { id: 4, text: "Benefit of using drones in agriculture?", options: ["Crop monitoring", "Watering", "Security", "All of the above"] },
-                    { id: 5, text: "Standard protocol for IoT devices?", options: ["MQTT", "HTTP", "FTP", "SSH"] },
-                ]);
+                setLoading(true);
+                // Hit start again - it resumes active tests
+                const data = await api.post('/api/v3/assessments/start', {});
+                setQuestions(data.data.questions);
             } catch (err) {
-                console.error(err);
+                console.error("Failed to resume test:", err);
+                alert("Session expired or invalid. Please start over.");
+                navigate('/skills/assessment');
             } finally {
                 setLoading(false);
             }
         };
         fetchTest();
-    }, [testId]);
+    }, [testId, questions.length, navigate]);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -56,28 +56,26 @@ export default function TestInterface() {
         return `${m}:${s < 10 ? '0' : ''}${s}`;
     };
 
-    const handleOptionSelect = (option) => {
-        setAnswers({ ...answers, [currentIdx]: option });
+    const handleOptionSelect = (optionIndex) => {
+        setAnswers({ ...answers, [currentIdx]: optionIndex });
     };
 
     const handleSubmit = async () => {
         try {
             setLoading(true);
-            // In a real app, we'd map answers to question IDs
-            // For now, we simulate the submission
             const submissionData = {
                 test_id: testId,
-                answers: Object.entries(answers).map(([idx, ans]) => ({
-                    question_idx: parseInt(idx),
-                    answer: ans
+                answers: Object.entries(answers).map(([idx, optIdx]) => ({
+                    question_id: questions[parseInt(idx)].id,
+                    selected_option_index: optIdx
                 }))
             };
 
-            const response = await api.post('/api/v3/assessments/submit', submissionData);
+            await api.post('/api/v3/assessments/submit', submissionData);
             navigate(`/assessment/result/${testId}`);
         } catch (err) {
             console.error("Submission Error:", err);
-            alert("Failed to submit test. Please try again.");
+            alert("Failed to submit test. Please check all questions are answered and try again.");
             setLoading(false);
         }
     };
@@ -193,22 +191,22 @@ export default function TestInterface() {
                                 {currentQuestion?.options.map((option, i) => (
                                     <button
                                         key={i}
-                                        onClick={() => handleOptionSelect(option)}
+                                        onClick={() => handleOptionSelect(i)}
                                         className={cn(
                                             "flex items-center p-5 border rounded-2xl transition-all text-left group/opt",
-                                            answers[currentIdx] === option
+                                            answers[currentIdx] === i
                                                 ? "border-hasis-green bg-hasis-green-pale ring-1 ring-hasis-green"
                                                 : "border-hasis-border bg-white hover:border-hasis-green-light"
                                         )}
                                     >
                                         <div className={cn(
                                             "w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm mr-4 transition-colors",
-                                            answers[currentIdx] === option ? "bg-hasis-green text-white" : "bg-gray-50 text-hasis-text-secondary group-hover/opt:bg-hasis-green-pale group-hover/opt:text-hasis-green"
+                                            answers[currentIdx] === i ? "bg-hasis-green text-white" : "bg-gray-50 text-hasis-text-secondary group-hover/opt:bg-hasis-green-pale group-hover/opt:text-hasis-green"
                                         )}>
                                             {String.fromCharCode(65 + i)}
                                         </div>
                                         <span className="font-semibold text-hasis-text-primary">{option}</span>
-                                        {answers[currentIdx] === option && <CheckCircle2 className="ml-auto w-5 h-5 text-hasis-green" />}
+                                        {answers[currentIdx] === i && <CheckCircle2 className="ml-auto w-5 h-5 text-hasis-green" />}
                                     </button>
                                 ))}
                             </div>
