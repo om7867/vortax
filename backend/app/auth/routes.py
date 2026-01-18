@@ -2,8 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException, status, Response, Request
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm
 from app.core.deps import get_db
-from app.auth.services import create_user, authenticate_user, get_user_by_username, get_user_by_email
-from app.auth.schemas import UserCreate, Token, UserOut
+from app.auth.services import (
+    create_user, authenticate_user, get_user_by_username, 
+    get_user_by_email, create_password_reset_token, reset_password as reset_password_svc
+)
+from app.auth.schemas import UserCreate, Token, UserOut, ForgotPasswordRequest, ResetPasswordRequest
 from app.core.security import create_access_token
 from app.auth.models import User
 from app.core.security import ALGORITHM, SECRET_KEY
@@ -87,3 +90,16 @@ def read_users_me(token: str = Depends(oauth2_scheme), db: Session = Depends(get
     if user is None:
         raise HTTPException(status_code=401, detail="User not found")
     return user
+
+@router.post("/forgot-password")
+def forgot_password(request: ForgotPasswordRequest, db: Session = Depends(get_db)):
+    # We return 200 even if email not found for security (prevent email enumeration)
+    create_password_reset_token(db, request.email)
+    return {"message": "If an account exists with this email, a reset link has been generated."}
+
+@router.post("/reset-password")
+def reset_user_password(request: ResetPasswordRequest, db: Session = Depends(get_db)):
+    success = reset_password_svc(db, request.token, request.new_password)
+    if not success:
+        raise HTTPException(status_code=400, detail="Invalid or expired reset token")
+    return {"message": "Password updated successfully"}

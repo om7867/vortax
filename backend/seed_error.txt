@@ -1,0 +1,157 @@
+Attempting to run main seed.py...
+--- MAIN SEED ERROR ---
+Traceback (most recent call last):
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UndefinedTable: relation "profile_audit_logs" does not exist
+LINE 1: INSERT INTO profile_audit_logs (id, actor_id, action, entity...
+                    ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\OM Sanjhira\OneDrive\Desktop\hc\backend\trace_main_seed_to_file.py", line 12, in <module>
+    seed_database()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\OM Sanjhira\OneDrive\Desktop\hc\backend\app\core\seed.py", line 225, in seed_database
+    GapAnalysisService.evaluate_gap_analysis(db, admin.id)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\OM Sanjhira\OneDrive\Desktop\hc\backend\app\gap_analysis\services.py", line 154, in evaluate_gap_analysis
+    AuditService.log_action(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        db=db,
+        ^^^^^^
+    ...<4 lines>...
+        metadata={"role_id": str(role.id), "readiness": readiness_percentage}
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\OM Sanjhira\OneDrive\Desktop\hc\backend\app\audit\services.py", line 35, in log_action
+    db.commit()
+    ~~~~~~~~~^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py", line 2030, in commit
+    trans.commit(_to_root=True)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "<string>", line 2, in commit
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py", line 1311, in commit
+    self._prepare_impl()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "<string>", line 2, in _prepare_impl
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py", line 1286, in _prepare_impl
+    self.session.flush()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py", line 4331, in flush
+    self._flush(objects)
+    ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py", line 4466, in _flush
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 224, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py", line 4427, in _flush
+    flush_context.execute()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 466, in execute
+    rec.execute(self)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 642, in execute
+    util.preloaded.orm_persistence.save_obj(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self.mapper,
+        ^^^^^^^^^^^^
+        uow.states_for_mapper_hierarchy(self.mapper, False, False),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        uow,
+        ^^^^
+    )
+    ^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\persistence.py", line 93, in save_obj
+    _emit_insert_statements(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        base_mapper,
+        ^^^^^^^^^^^^
+    ...<3 lines>...
+        insert,
+        ^^^^^^^
+    )
+    ^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\persistence.py", line 1233, in _emit_insert_statements
+    result = connection.execute(
+        statement,
+        params,
+        execution_options=execution_options,
+    )
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\sql\elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\engine\default.py", line 951, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) relation "profile_audit_logs" does not exist
+LINE 1: INSERT INTO profile_audit_logs (id, actor_id, action, entity...
+                    ^
+
+[SQL: INSERT INTO profile_audit_logs (id, actor_id, action, entity_type, entity_id, changes) VALUES (%(id)s::UUID, %(actor_id)s::UUID, %(action)s, %(entity_type)s, %(entity_id)s::UUID, %(changes)s::JSON) RETURNING profile_audit_logs.timestamp]
+[parameters: {'id': UUID('79ab01cf-ce83-4aa6-9a24-ce0b16700325'), 'actor_id': UUID('9deceea2-00de-4717-8c13-0b9cee08b151'), 'action': 'GAP_ANALYSIS_RUN', 'entity_type': 'CareerReadiness', 'entity_id': UUID('0aaebd36-e34c-408e-8a7f-5eb25bb456fa'), 'changes': '{"role_id": "6244583f-7391-4b85-8ea0-6478c6d13497", "readiness": 64.31372549019608}'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+
+Error object: (psycopg2.errors.UndefinedTable) relation "profile_audit_logs" does not exist
+LINE 1: INSERT INTO profile_audit_logs (id, actor_id, action, entity...
+                    ^
+
+[SQL: INSERT INTO profile_audit_logs (id, actor_id, action, entity_type, entity_id, changes) VALUES (%(id)s::UUID, %(actor_id)s::UUID, %(action)s, %(entity_type)s, %(entity_id)s::UUID, %(changes)s::JSON) RETURNING profile_audit_logs.timestamp]
+[parameters: {'id': UUID('79ab01cf-ce83-4aa6-9a24-ce0b16700325'), 'actor_id': UUID('9deceea2-00de-4717-8c13-0b9cee08b151'), 'action': 'GAP_ANALYSIS_RUN', 'entity_type': 'CareerReadiness', 'entity_id': UUID('0aaebd36-e34c-408e-8a7f-5eb25bb456fa'), 'changes': '{"role_id": "6244583f-7391-4b85-8ea0-6478c6d13497", "readiness": 64.31372549019608}'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+--- END ERROR ---

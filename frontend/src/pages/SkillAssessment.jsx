@@ -8,6 +8,7 @@ import { Label } from '../components/ui/label';
 import { AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
+import profileV2Service from '../services/profileV2';
 
 export default function SkillAssessment() {
     const { user } = useAuth();
@@ -18,8 +19,21 @@ export default function SkillAssessment() {
     const [answers, setAnswers] = useState({});
     const [result, setResult] = useState(null);
 
+    const [eligibility, setEligibility] = useState({ eligible: true, reason: null });
+
     useEffect(() => {
-        fetchAssessment(1); // Auto-load Soil Health for demo
+        const checkAccess = async () => {
+            try {
+                const status = await profileV2Service.checkEligibility();
+                setEligibility(status);
+                if (status.eligible) {
+                    fetchAssessment(1); // Auto-load Soil Health if eligible
+                }
+            } catch (err) {
+                console.error("Eligibility check failed", err);
+            }
+        };
+        checkAccess();
     }, []);
 
     const fetchAssessment = async (id) => {
@@ -62,6 +76,28 @@ export default function SkillAssessment() {
             setLoading(false);
         }
     };
+
+    if (!eligibility.eligible) {
+        return (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6 text-center">
+                <Card className="max-w-md w-full p-10 border-0 shadow-2xl bg-white rounded-[40px]">
+                    <div className="w-20 h-20 bg-amber-50 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                        <AlertCircle className="w-10 h-10 text-amber-500" />
+                    </div>
+                    <CardTitle className="text-2xl font-black mb-4">Elite Access Restricted</CardTitle>
+                    <p className="text-gray-500 mb-8 leading-relaxed font-semibold">
+                        {eligibility.reason || "Complete your profile to at least 70% to unlock Skill Assessments."}
+                    </p>
+                    <Button
+                        asChild
+                        className="w-full h-14 rounded-2xl bg-blue-600 hover:bg-blue-700 font-black uppercase tracking-widest"
+                    >
+                        <Link to="/profile">Complete Profile Now</Link>
+                    </Button>
+                </Card>
+            </div>
+        );
+    }
 
     if (loading && !assessment) {
         return (

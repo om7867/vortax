@@ -1,0 +1,76 @@
+Attempting to run seed_expansion.py...
+--- EXPANSION SEED ERROR ---
+Traceback (most recent call last):
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\clsregistry.py", line 518, in _resolve_name
+    rval = getattr(rval, token)
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\clsregistry.py", line 350, in __getattr__
+    raise NameError(
+    ...<2 lines>...
+    )
+NameError: Module 'app' has no mapped classes registered under the name 'auth'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\OM Sanjhira\OneDrive\Desktop\hc\backend\trace_expansion_seed_to_file.py", line 12, in <module>
+    seed_expansion()
+    ~~~~~~~~~~~~~~^^
+  File "C:\Users\OM Sanjhira\OneDrive\Desktop\hc\backend\app\core\seed_expansion.py", line 17, in seed_expansion
+    skills = db.query(SkillMaster).limit(10).all()
+             ~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\session.py", line 2941, in query
+    return self._query_cls(entities, self, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\query.py", line 276, in __init__
+    self._set_entities(entities)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\query.py", line 289, in _set_entities
+    coercions.expect(
+    ~~~~~~~~~~~~~~~~^
+        roles.ColumnsClauseRole,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        post_inspect=True,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\sql\coercions.py", line 388, in expect
+    insp._post_inspect
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 1338, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ~~~~~~~~~^^^^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2724, in _post_inspect
+    self._check_configure()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2401, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4218, in _configure_registries
+    _do_configure_registries(registries, cascade)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\mapper.py", line 4259, in _do_configure_registries
+    mapper._post_configure_properties()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\mapper.py", line 2418, in _post_configure_properties
+    prop.init()
+    ~~~~~~~~~^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\interfaces.py", line 595, in init
+    self.do_init()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\relationships.py", line 1655, in do_init
+    self._setup_entity()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\relationships.py", line 1865, in _setup_entity
+    self._clsregistry_resolve_name(argument)(),
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\clsregistry.py", line 522, in _resolve_name
+    self._raise_for_name(n.args[0], n)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\OM Sanjhira\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\orm\clsregistry.py", line 501, in _raise_for_name
+    raise exc.InvalidRequestError(
+    ...<5 lines>...
+    ) from err
+sqlalchemy.exc.InvalidRequestError: When initializing mapper Mapper[UserLearningProgress(user_learning_progress)], expression 'app.auth.models.User' failed to locate a name ("Module 'app' has no mapped classes registered under the name 'auth'"). If this is a class name, consider adding this relationship() to the <class 'app.recommendations.models.UserLearningProgress'> class after both dependent classes have been defined.
+
+Error object: When initializing mapper Mapper[UserLearningProgress(user_learning_progress)], expression 'app.auth.models.User' failed to locate a name ("Module 'app' has no mapped classes registered under the name 'auth'"). If this is a class name, consider adding this relationship() to the <class 'app.recommendations.models.UserLearningProgress'> class after both dependent classes have been defined.
+--- END ERROR ---

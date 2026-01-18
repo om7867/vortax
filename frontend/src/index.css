@@ -1,42 +1,41 @@
 @import "tailwindcss";
 
 @theme {
-  --color-agri-green: #1B5E20;
-  --color-agri-green-light: #4CAF50;
-  --color-agri-yellow: #F9A825;
-  --color-agri-brown: #6D4C41;
-  --color-agri-bg: #F1F8E9;
+  --color-hasis-green: #2E7D32;
+  --color-hasis-green-light: #4CAF50;
+  --color-hasis-green-pale: #E8F5E9;
+  --color-hasis-card-bg: #FFFFFF;
+  --color-hasis-page-bg: #F5F7F9;
+  --color-hasis-text-primary: #1A1A1A;
+  --color-hasis-text-secondary: #666666;
+  --color-hasis-border: #E0E0E0;
 
   --font-sans: 'Inter', system-ui, sans-serif;
+  
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
 }
 
 @layer base {
   body {
-    @apply bg-agri-bg text-gray-900 font-sans antialiased;
+    @apply bg-hasis-page-bg text-hasis-text-primary font-sans antialiased;
   }
 }
 
 @layer utilities {
-  .glass-card {
-    @apply bg-white/70 backdrop-blur-lg border border-white/50 shadow-xl rounded-2xl;
+  .hasis-card {
+    @apply bg-hasis-card-bg border border-hasis-border shadow-sm rounded-2xl p-6;
   }
 
-  .glass-card-dark {
-    @apply bg-gray-900/80 backdrop-blur-lg border border-white/10 shadow-xl rounded-2xl text-white;
+  .hasis-button-primary {
+    @apply bg-hasis-green hover:bg-hasis-green-light text-white font-semibold py-3 px-6 rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50;
   }
 
-  .text-gradient-agri {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-agri-green to-agri-yellow;
+  .hasis-input {
+    @apply w-full h-12 bg-white border border-hasis-border rounded-xl px-4 focus:ring-2 focus:ring-hasis-green focus:border-transparent outline-none transition-all;
   }
-}
 
-@theme {
-  --color-gray-50: #f9fafb;
-  --color-gray-900: #111827;
-}
-
-@layer base {
-  body {
-    @apply antialiased text-gray-900 bg-gray-50;
+  .text-gradient-hasis {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-hasis-green to-hasis-green-light;
   }
 }

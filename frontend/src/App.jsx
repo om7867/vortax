@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
-import Dashboard from './pages/Dashboard';
+import EnterpriseDashboard from './pages/Dashboard/EnterpriseDashboard';
 import Admin from './pages/Admin';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -11,8 +11,13 @@ import GapAnalysis from './pages/GapAnalysis';
 import Recommendations from './pages/Recommendations';
 import SkillAssessment from './pages/SkillAssessment';
 import LearningJourney from './pages/LearningJourney';
+import ResetPassword from './pages/ResetPassword';
 
 import UserProfile from './pages/UserProfile';
+import StartTest from './pages/Assessment/StartTest';
+import TestInterface from './pages/Assessment/TestInterface';
+import TestResult from './pages/Assessment/TestResult';
+import SkillsDashboard from './pages/Scoring/SkillsDashboard';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -22,12 +27,14 @@ const ProtectedRoute = ({ children }) => {
   return (
     <>
       <Navbar />
-      <div className="pt-0">
+      <div className="pt-16">
         {children}
       </div>
     </>
   );
 };
+
+// RecommendationsGuard removed to allow direct access to recommendations as per user request
 
 function App() {
   return (
@@ -37,11 +44,12 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignupWizard />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route
             path="/dashboard"
             element={
               <ProtectedRoute>
-                <Dashboard />
+                <EnterpriseDashboard />
               </ProtectedRoute>
             }
           />
@@ -63,7 +71,7 @@ function App() {
             }
           />
           <Route
-            path="/skills/recommendations"
+            path="/recommendations"
             element={
               <ProtectedRoute>
                 <Recommendations />
@@ -74,7 +82,31 @@ function App() {
             path="/skills/assessment"
             element={
               <ProtectedRoute>
-                <SkillAssessment />
+                <StartTest />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/assessment/test/:testId"
+            element={
+              <ProtectedRoute>
+                <TestInterface />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/assessment/result/:testId"
+            element={
+              <ProtectedRoute>
+                <TestResult />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/skills/dashboard"
+            element={
+              <ProtectedRoute>
+                <SkillsDashboard />
               </ProtectedRoute>
             }
           />

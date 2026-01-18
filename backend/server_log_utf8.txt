@@ -1,0 +1,200 @@
+﻿uvicorn : Traceback (most 
+recent call last):
+At line:1 char:1
++ uvicorn app.main:app --host 
+127.0.0.1 --port 8000 > 
+server_log.txt 2> ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~
+    + CategoryInfo          :  
+   NotSpecified: (Traceback (  
+  most recent call last)::St   
+ ring) [], RemoteException
+    + FullyQualifiedErrorId :  
+   NativeCommandError
+ 
+  File "<frozen runpy>", line 
+198, in _run_module_as_main
+  File "<frozen runpy>", line 
+88, in _run_code
+  File "C:\Users\OM Sanjhira\Ap
+pData\Local\Programs\Python\Pyt
+hon313\Scripts\uvicorn.exe\__ma
+in__.py", line 7, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\OM Sanjhira\Ap
+pData\Local\Programs\Python\Pyt
+hon313\Lib\site-packages\click\
+core.py", line 1161, in 
+__call__
+    return self.main(*args, 
+**kwargs)
+           
+~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\OM Sanjhira\Ap
+pData\Local\Programs\Python\Pyt
+hon313\Lib\site-packages\click\
+core.py", line 1082, in main
+    rv = self.invoke(ctx)
+  File "C:\Users\OM Sanjhira\Ap
+pData\Local\Programs\Python\Pyt
+hon313\Lib\site-packages\click\
+core.py", line 1443, in invoke
+    return 
+ctx.invoke(self.callback, 
+**ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\OM Sanjhira\Ap
+pData\Local\Programs\Python\Pyt
+hon313\Lib\site-packages\click\
+core.py", line 788, in invoke
+    return __callback(*args, 
+**kwargs)
+  File "C:\Users\OM Sanjhira\Ap
+pData\Local\Programs\Python\Pyt
+hon313\Lib\site-packages\uvicor
+n\main.py", line 423, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<46 lines>...
+        h11_max_incomplete_even
+t_size=h11_max_incomplete_event
+_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^
+    )
+    ^
+  File "C:\Users\OM Sanjhira\Ap
+pData\Local\Programs\Python\Pyt
+hon313\Lib\site-packages\uvicor
+n\main.py", line 593, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "C:\Users\OM Sanjhira\Ap
+pData\Local\Programs\Python\Pyt
+hon313\Lib\site-packages\uvicor
+n\server.py", line 67, in run
+    return asyncio_run(self.ser
+ve(sockets=sockets), loop_facto
+ry=self.config.get_loop_factory
+())
+  File "C:\Users\OM Sanjhira\Ap
+pData\Local\Programs\Python\Pyt
+hon313\Lib\asyncio\runners.py",
+ line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\OM Sanjhira\Ap
+pData\Local\Programs\Python\Pyt
+hon313\Lib\asyncio\runners.py",
+ line 118, in run
+    return self._loop.run_until
+_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~^^^^^^
+  File "C:\Users\OM Sanjhira\Ap
+pData\Local\Programs\Python\Pyt
+hon313\Lib\asyncio\base_events.
+py", line 725, in 
+run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\OM Sanjhira\Ap
+pData\Local\Programs\Python\Pyt
+hon313\Lib\site-packages\uvicor
+n\server.py", line 71, in serve
+    await self._serve(sockets)
+  File "C:\Users\OM Sanjhira\Ap
+pData\Local\Programs\Python\Pyt
+hon313\Lib\site-packages\uvicor
+n\server.py", line 78, in 
+_serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "C:\Users\OM Sanjhira\Ap
+pData\Local\Programs\Python\Pyt
+hon313\Lib\site-packages\uvicor
+n\config.py", line 438, in load
+    self.loaded_app = 
+import_from_string(self.app)
+                      
+~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\OM Sanjhira\Ap
+pData\Local\Programs\Python\Pyt
+hon313\Lib\site-packages\uvicor
+n\importer.py", line 19, in 
+import_from_string
+    module = importlib.import_m
+odule(module_str)
+  File "C:\Users\OM Sanjhira\Ap
+pData\Local\Programs\Python\Pyt
+hon313\Lib\importlib\__init__.p
+y", line 88, in import_module
+    return _bootstrap._gcd_impo
+rt(name[level:], package, 
+level)
+           ~~~~~~~~~~~~~~~~~~~~
+~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^
+  File "<frozen 
+importlib._bootstrap>", line 
+1387, in _gcd_import
+  File "<frozen 
+importlib._bootstrap>", line 
+1360, in _find_and_load
+  File "<frozen 
+importlib._bootstrap>", line 
+1331, in 
+_find_and_load_unlocked
+  File "<frozen 
+importlib._bootstrap>", line 
+935, in _load_unlocked
+  File "<frozen importlib._boot
+strap_external>", line 1026, 
+in exec_module
+  File "<frozen 
+importlib._bootstrap>", line 
+488, in 
+_call_with_frames_removed
+  File "C:\Users\OM Sanjhira\On
+eDrive\Desktop\hc\backend\app\m
+ain.py", line 19, in <module>
+    from app.recommendations 
+import routes as 
+recommendation_routes
+  File "C:\Users\OM Sanjhira\On
+eDrive\Desktop\hc\backend\app\r
+ecommendations\routes.py", 
+line 11, in <module>
+    from . import schemas, 
+services
+  File "C:\Users\OM Sanjhira\On
+eDrive\Desktop\hc\backend\app\r
+ecommendations\services.py", 
+line 305, in <module>
+    class ProgressService:
+    ...<51 lines>...
+            return result
+  File "C:\Users\OM Sanjhira\On
+eDrive\Desktop\hc\backend\app\r
+ecommendations\services.py", 
+line 307, in ProgressService
+    def update_progress(db: 
+Session, user_id: UUID, 
+skill_id: UUID, 
+completed_hours: float) -> 
+UserLearningProgress:
+                               
+                               
+                               
+  ^^^^^^^^^^^^^^^^^^^^
+NameError: name 
+'UserLearningProgress' is not 
+defined
+ML Model Trained Successfully

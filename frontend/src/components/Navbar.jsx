@@ -14,23 +14,21 @@ export default function Navbar() {
         { name: 'Profile', path: '/profile' },
         { name: 'Skills', path: '/skills/assessment' },
         { name: 'Gap Analysis', path: '/skills/gap-analysis' },
-        { name: 'Recommendations', path: '/skills/recommendations' },
+        { name: 'Recommendations', path: '/recommendations' },
         { name: 'Learning Journey', path: '/learning-journey' },
     ];
 
     return (
-        <nav className="bg-white border-b border-gray-100 shadow-sm sticky top-0 z-50">
+        <nav className="bg-white border-b border-gray-100 shadow-sm fixed top-0 w-full z-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16">
                     <div className="flex items-center gap-8">
                         {/* Logo */}
-                        {/* Logo */}
                         <Link to="/dashboard" className="flex items-center gap-3">
-                            <img src="/logo.png" alt="PathIQ Logo" className="h-14 w-auto object-contain" />
-                            {/* <span className="font-bold text-xl text-gray-900 tracking-tight">PathIQ</span> */}
-                            {/* Text hidden if logo contains text? Assessing user image... image has text "PathIQ". Hiding text span or keeping it? */}
-                            {/* User image has text PathIQ. I will hide the text span to avoid duplication, or just keep it for accessibility/fallback? */}
-                            {/* Let's keep it clean: Just the logo image if it's a full lockout. */}
+                            <div className="w-10 h-10 bg-hasis-green rounded-xl flex items-center justify-center text-white">
+                                <BarChart2 className="w-6 h-6" />
+                            </div>
+                            <span className="text-2xl font-black text-hasis-green tracking-tighter">PathIQ</span>
                         </Link>
 
                         {/* Nav Links */}
@@ -41,9 +39,9 @@ export default function Navbar() {
                                     <Link
                                         key={item.path}
                                         to={item.path}
-                                        className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActive
-                                            ? 'text-blue-600 bg-blue-50'
-                                            : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
+                                        className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${isActive
+                                            ? 'text-hasis-green bg-hasis-green-pale shadow-sm'
+                                            : 'text-hasis-text-secondary hover:text-hasis-text-primary hover:bg-gray-50'
                                             }`}
                                     >
                                         {item.name}
@@ -55,17 +53,17 @@ export default function Navbar() {
 
                     {/* Right Side */}
                     <div className="flex items-center gap-4">
-                        <Button variant="ghost" size="icon" className="text-gray-500 relative">
+                        <Button variant="ghost" size="icon" className="text-hasis-text-secondary hover:text-hasis-green hover:bg-hasis-green-pale relative rounded-xl transition-all">
                             <Bell className="w-5 h-5" />
-                            <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+                            <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
                         </Button>
 
-                        <div className="flex items-center gap-3 pl-4 border-l border-gray-100">
+                        <div className="flex items-center gap-3 pl-4 border-l border-hasis-border">
                             <div className="text-right hidden sm:block">
-                                <p className="text-sm font-bold text-gray-900">{user.username}</p>
-                                <p className="text-xs text-gray-500 capitalize">{user.role?.toLowerCase() || 'Member'}</p>
+                                <p className="text-sm font-bold text-hasis-text-primary">{user.username}</p>
+                                <p className="text-xs text-hasis-text-secondary capitalize">{user.role?.toLowerCase() || 'Member'}</p>
                             </div>
-                            <Button variant="ghost" size="icon" onClick={logout} className="rounded-full bg-gray-50 hover:bg-red-50 hover:text-red-600">
+                            <Button variant="ghost" size="icon" onClick={logout} className="rounded-xl bg-gray-50 text-hasis-text-secondary hover:bg-red-50 hover:text-red-600 transition-all">
                                 <LogOut className="w-4 h-4" />
                             </Button>
                         </div>

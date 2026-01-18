@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 from typing import Optional, List
 from datetime import datetime
 from uuid import UUID
@@ -14,13 +14,15 @@ class UserCreate(UserBase):
     password: str
     career_goals: Optional[List[str]] = None
 
-class UserOut(UserBase):
+class UserOut(BaseModel):
     id: UUID
+    username: str
+    email: str
+    full_name: Optional[str] = None
     role: str
     created_at: datetime
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 # Token Schemas
 class Token(BaseModel):
@@ -39,5 +41,12 @@ class LoginHistoryOut(BaseModel):
     success: bool
     timestamp: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
+
+# Password Reset Schemas
+class ForgotPasswordRequest(BaseModel):
+    email: str
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str

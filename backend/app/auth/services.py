@@ -3,6 +3,9 @@ from app.auth.models import User, LoginHistory
 from app.auth.schemas import UserCreate
 from app.core.security import get_password_hash, verify_password
 from fastapi import Request
+import secrets
+from datetime import datetime, timedelta
+from app.core.mailer import send_reset_password_email
 
 def get_user_by_email(db: Session, email: str):
     return db.query(User).filter(User.email == email).first()
@@ -54,3 +57,33 @@ def authenticate_user(db: Session, username_or_email: str, password: str, reques
     if success:
         return user
     return None
+
+def create_password_reset_token(db: Session, email: str):
+    user = get_user_by_email(db, email)
+    if not user:
+        return None
+    
+    token = secrets.token_urlsafe(32)
+    user.reset_token = token
+    user.reset_token_expiry = datetime.utcnow() + timedelta(hours=1)
+    db.commit()
+    
+    # Send actual email
+    send_reset_password_email(email, token)
+    
+    return token
+
+def reset_password(db: Session, token: str, new_password: str):
+    user = db.query(User).filter(
+        User.reset_token == token,
+        User.reset_token_expiry > datetime.utcnow()
+    ).first()
+    
+    if not user:
+        return False
+    
+    user.hashed_password = get_password_hash(new_password)
+    user.reset_token = None
+    user.reset_token_expiry = None
+    db.commit()
+    return True
